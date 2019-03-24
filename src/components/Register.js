@@ -1,7 +1,9 @@
 import React from 'react';
 import {
-    Form, Input, Button
+    Form, Input, Button, message
 } from 'antd';
+
+import { API_ROOT } from "../constants";
 
 class RegistrationForm extends React.Component {
     state = {
@@ -14,6 +16,22 @@ class RegistrationForm extends React.Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
+                // Fire API call
+                fetch(`${API_ROOT}/signup`, {
+                    method: "POST",
+                    body: JSON.stringify({
+                        username: values.username,
+                        password: values.password
+                    })
+                })
+                    .then((response) => {
+                        if (response.ok) {
+                            return response;
+                        }
+                        throw new Error(response.statusText);
+                    })
+                    .then(() => message.success("Register Successed! "))
+                    .catch(() => message.error("Registration Failed! "))
             }
         });
     }
@@ -67,7 +85,7 @@ class RegistrationForm extends React.Component {
         };
 
         return (
-            <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+            <Form {...formItemLayout} onSubmit={this.handleSubmit} className="register">
                 <Form.Item
                     label="Username"
                 >

@@ -1,0 +1,1 @@
+export const API_ROOT = 'http://34.73.252.230:8080/api/v1';
