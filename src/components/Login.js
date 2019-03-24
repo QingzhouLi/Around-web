@@ -3,6 +3,7 @@ import {
     Form, Icon, Input, Button, message
 } from 'antd';
 import { API_ROOT } from "../constants";
+import { Link } from "react-router-dom";
 
 class NormalLoginForm extends React.Component {
     handleSubmit = (e) => {
@@ -26,6 +27,7 @@ class NormalLoginForm extends React.Component {
                     .then((data) => {
                         message.success("Login Successed! ");
                         console.log(data)
+                        this.props.handleLogin();
                     })
                     .catch((err) =>{ 
                         message.error("Login Failed! ");
@@ -57,8 +59,8 @@ render() {
             <Form.Item>
                 <Button type="primary" htmlType="submit" className="login-form-button">
                     Log in
-            </Button>
-                Or <a href="">register now!</a>
+                </Button>
+                Or <Link to="/register">register now!</Link>
             </Form.Item>
         </Form>
     );
