@@ -49,13 +49,13 @@ export class CreatePostButton extends React.Component {
                                 confirmLoading: false,
                                 visible: false,
                             });
+                            this.props.loadNearByPosts();
                             return response;
                         }
                         throw new Error(response.statusText);
                     })
                     .then(() => {
                         message.success("Post create successfully! ");
-                        
                     })
                     .catch((err) => {
                         message.error('Failed to create the post.');
