@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, Button } from 'antd';
+import { CreatePostForm } from './CreatePostForm';
 
 export class CreatePostButton extends React.Component {
     state = {
@@ -47,6 +48,7 @@ export class CreatePostButton extends React.Component {
                     onCancel={this.handleCancel}
                     okText="Creat"
                 >
+                    <CreatePostForm />
                 </Modal>
             </div>
         );
