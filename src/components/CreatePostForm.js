@@ -14,11 +14,14 @@ class NormalCreatPostForm extends React.Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-
-
+        const formItemLayout = {
+            labelCol: { span: 6 },
+            wrapperCol: { span: 14 },
+        };
 
         return (
-            <Form>
+            <Form {...formItemLayout} >
+
                 <Form.Item
                     label="Message"
                 >
@@ -42,7 +45,7 @@ class NormalCreatPostForm extends React.Component {
                             valuePropName: 'fileList',
                             getValueFromEvent: this.normFile,
                         })(
-                            <Upload.Dragger name="files" beforeUpload= {this.beforeUpload}>
+                            <Upload.Dragger name="files" beforeUpload={this.beforeUpload}>
                                 <p className="ant-upload-drag-icon">
                                     <Icon type="inbox" />
                                 </p>
