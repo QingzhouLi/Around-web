@@ -2,12 +2,10 @@ import React from 'react';
 import { Tabs, Button, Spin } from 'antd';
 import { GEO_OPTIONS, POS_KEY, API_ROOT, AUTH_HEADER, TOKEN_KEY } from '../constants';
 import { Gallery } from './Gallery';
+import {CreatePostButton} from './CreatePostButton'
 // import src from '*.svg';
 
 const TabPane = Tabs.TabPane;
-
-const operations = <Button>Extra Action</Button>;
-
 
 
 export class Home extends React.Component {
@@ -120,6 +118,7 @@ export class Home extends React.Component {
 
 
     render() {
+        const operations = <CreatePostButton/>
         return (
             <Tabs className="main-tabs" tabBarExtraContent={operations}>
                 <TabPane tab="Image Post" key="1">
