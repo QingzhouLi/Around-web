@@ -21,4 +21,3 @@ export class TopBar extends React.Component {
     );
   }
 }
-

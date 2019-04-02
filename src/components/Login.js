@@ -11,6 +11,7 @@ class NormalLoginForm extends React.Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
+                //Fire API call
                 fetch(`${API_ROOT}/login`, {
                     method: "POST",
                     body: JSON.stringify({
@@ -27,7 +28,7 @@ class NormalLoginForm extends React.Component {
                     .then((data) => {
                         message.success("Login Successed! ");
                         console.log(data)
-                        this.props.handleLogin();
+                        this.props.handleLogin(data);
                     })
                     .catch((err) =>{ 
                         message.error("Login Failed! ");
