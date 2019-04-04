@@ -16,8 +16,6 @@ export class CreatePostButton extends React.Component {
     }
 
     handleOk = () => {
-        
-
         this.form.validateFields((err, values) => {
             if (!err) {
                 console.log(values);
@@ -59,6 +57,7 @@ export class CreatePostButton extends React.Component {
                     })
                     .catch((err) => {
                         message.error('Failed to create the post.');
+                        console.log(err);
                         this.setState({
                             confirmLoading: false,
                         });

@@ -57,7 +57,7 @@ export class Home extends React.Component {
         });
 
         //Fire API call
-        fetch(`${API_ROOT}/search?lat=${lat}&lon=${lon}&range=20000`, {
+        fetch(`${API_ROOT}/search?lat=${lat}&lon=${lon}&range=200`, {
             headers: {
                 Authorization: `${AUTH_HEADER} ${token}`
             }
@@ -119,7 +119,7 @@ export class Home extends React.Component {
 
     render() {
         const operations = <CreatePostButton loadNearByPosts = {this.loadNearByPosts}/>
-        
+
         return (
             <Tabs className="main-tabs" tabBarExtraContent={operations}>
                 <TabPane tab="Image Post" key="1">
