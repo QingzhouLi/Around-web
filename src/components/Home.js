@@ -21,7 +21,6 @@ export class Home extends React.Component {
             this.setState({
                 isLoadingGeoLocation: true,
             });
-
             navigator.geolocation.getCurrentPosition(
                 this.onSuccessLoadGeoLocation,
                 this.onFailedLoadGeoLoaction,
