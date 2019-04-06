@@ -47,16 +47,17 @@ export class Home extends React.Component {
         this.loadNearByPosts();
     };
 
-    loadNearByPosts = () => {
+    loadNearByPosts = (center, radius) => {
         const token = localStorage.getItem(TOKEN_KEY);
-        const { lat, lon } = JSON.parse(localStorage.getItem(POS_KEY));
+        const { lat, lon } = center ? center : JSON.parse(localStorage.getItem(POS_KEY));
+        const range = radius ? radius : 20
 
         this.setState({
             isLoadingPosts: true,
         });
 
         //Fire API call
-        fetch(`${API_ROOT}/search?lat=${lat}&lon=${lon}&range=200`, {
+        fetch(`${API_ROOT}/search?lat=${lat}&lon=${lon}&range=${range}`, {
             headers: {
                 Authorization: `${AUTH_HEADER} ${token}`
             }
@@ -129,8 +130,11 @@ export class Home extends React.Component {
                     <AroundMap
                         googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyD3CEh9DXuyjozqptVB5LA-dN7MxWWkr9s&v=3.exp&libraries=geometry,drawing,places"
                         loadingElement={<div style={{ height: `100%` }} />}
-                        containerElement={<div style={{ height: `400px` }} />}
-                        mapElement={<div style={{ height: `100%` }} />} />
+                        containerElement={<div style={{ height: `600px` }} />}
+                        mapElement={<div style={{ height: `100%` }} />}
+                        posts={this.state.posts}
+                        loadNearByPosts = {this.loadNearByPosts}
+                    />
                 </TabPane>
             </Tabs>
         )

@@ -11,3 +11,5 @@ export const GEO_OPTIONS = {
 
 export const POS_KEY = 'POS_KEY';
 export const AUTH_HEADER = 'Bearer';
+
+export const LOC_SHACKE = 0.02;
