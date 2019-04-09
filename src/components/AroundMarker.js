@@ -35,11 +35,22 @@ export class AroundMarker extends React.Component {
                 {this.state.isOpen ?
                     (<InfoWindow onCloseClick={this.toggleOpen}>
                         <div>
-                            <img
-                                className="around-marker-image"
-                                src={url}
-                                alt={message}
-                            />
+                            {isImagePost ? (
+                                <img
+                                    className="around-marker-image"
+                                    src={url}
+                                    alt={message}
+                                />
+                            ) :
+                                (
+                                    <video
+                                        className="around-marker-video"
+                                        src={url}
+                                        alt={message}
+                                        controls
+                                    />
+                                )
+                            }
                             <p>{`${user}: ${message}`}</p>
                         </div>
                     </InfoWindow>) : null}
