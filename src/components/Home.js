@@ -1,20 +1,26 @@
 import React from 'react';
-import { Tabs, Spin, Row, Col } from 'antd';
+import { Tabs, Spin, Row, Col, Radio } from 'antd';
 import { GEO_OPTIONS, POS_KEY, API_ROOT, AUTH_HEADER, TOKEN_KEY } from '../constants';
 import { Gallery } from './Gallery';
 import { CreatePostButton } from './CreatePostButton';
 import { AroundMap } from './AroundMap';
 
 const TabPane = Tabs.TabPane;
+const RadioGroup = Radio.Group;
 
 
 export class Home extends React.Component {
+
+
     state = {
         isLoadingGeoLocation: false,
         error: '',
         isLoadingPosts: false,
         posts: [],
+        topic: 'around',
     }
+
+
 
     componentDidMount() {
         if ('geolocation' in navigator) {
@@ -50,7 +56,7 @@ export class Home extends React.Component {
     loadNearByPosts = (center, radius) => {
         const token = localStorage.getItem(TOKEN_KEY);
         const { lat, lon } = center ? center : JSON.parse(localStorage.getItem(POS_KEY));
-        const range = radius ? radius : 20000
+        const range = radius ? radius : 200000
 
         this.setState({
             isLoadingPosts: true,
@@ -69,7 +75,7 @@ export class Home extends React.Component {
                 throw new Error("Fail to load posts.");
             })
             .then((data) => {
-                // console.log(data)
+                console.log(data)
                 this.setState({
                     isLoadingPosts: false,
                     posts: data ? data : [],
@@ -83,8 +89,54 @@ export class Home extends React.Component {
             })
     }
 
-    onFailedLoadGeoLoaction = () => {
+    loadFacesAroundWorld = () => {
+        const token = localStorage.getItem(TOKEN_KEY);
 
+        this.setState({
+            isLoadingPosts: true,
+        });
+
+        //Fire API call
+        fetch(`${API_ROOT}/cluster?term=face`, {
+            headers: {
+                Authorization: `${AUTH_HEADER} ${token}`
+            }
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error("Fail to load posts.");
+            })
+            .then((data) => {
+                console.log(data)
+                this.setState({
+                    isLoadingPosts: false,
+                    posts: data ? data : [],
+                });
+            })
+            .catch((e) => {
+                this.setState({
+                    isLoadingPosts: false,
+                    error: e.message,
+                })
+            })
+    }
+
+    onTopicChange = (e) => {
+        // console.log(e.target.value)
+        const topic = e.target.value;
+        this.setState({
+            topic,
+        })
+        if (topic === 'face'){
+            this.loadFacesAroundWorld();
+        }else{
+            this.loadNearByPosts();
+        }
+    }
+
+    onFailedLoadGeoLoaction = () => {
         this.setState({
             error: 'Fail to get user location',
             isLoadingGeoLocation: false,
@@ -144,28 +196,37 @@ export class Home extends React.Component {
     }
 
 
+
+
     render() {
         const operations = <CreatePostButton loadNearByPosts={this.loadNearByPosts} />
 
         return (
-            <Tabs className="main-tabs" tabBarExtraContent={operations}>
-                <TabPane tab="Image Post" key="1">
-                    {this.getPanelContent('image')}
-                </TabPane>
-                <TabPane tab="Vedio Post" key="2">
-                    {this.getPanelContent('video')}
-                </TabPane>
-                <TabPane tab="Map" key="3">
-                    <AroundMap
-                        googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyD3CEh9DXuyjozqptVB5LA-dN7MxWWkr9s&v=3.exp&libraries=geometry,drawing,places"
-                        loadingElement={<div style={{ height: `100%` }} />}
-                        containerElement={<div style={{ height: `600px` }} />}
-                        mapElement={<div style={{ height: `100%` }} />}
-                        posts={this.state.posts}
-                        loadNearByPosts={this.loadNearByPosts}
-                    />
-                </TabPane>
-            </Tabs>
+            <div>
+                <RadioGroup onChange={this.onTopicChange} value={this.state.topic}>
+                    <Radio value='around'>Posts Around Me</Radio>
+                    <Radio value='face'>Faces Around the World</Radio>
+                </RadioGroup>
+                <Tabs className="main-tabs" tabBarExtraContent={operations}>
+                    <TabPane tab="Image Post" key="1">
+                        {this.getPanelContent('image')}
+                    </TabPane>
+                    <TabPane tab="Vedio Post" key="2">
+                        {this.getPanelContent('video')}
+                    </TabPane>
+                    <TabPane tab="Map" key="3">
+                        <AroundMap
+                            googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyD3CEh9DXuyjozqptVB5LA-dN7MxWWkr9s&v=3.exp&libraries=geometry,drawing,places"
+                            loadingElement={<div style={{ height: `100%` }} />}
+                            containerElement={<div style={{ height: `600px` }} />}
+                            mapElement={<div style={{ height: `100%` }} />}
+                            posts={this.state.posts}
+                            loadNearByPosts={this.state.topic === 'around'? this.loadNearByPosts: this.loadFacesAroundWorld}
+                        />
+                    </TabPane>
+                </Tabs>
+            </div>
+
         )
     }
 }
