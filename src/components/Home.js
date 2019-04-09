@@ -69,7 +69,7 @@ export class Home extends React.Component {
                 throw new Error("Fail to load posts.");
             })
             .then((data) => {
-                console.log(data)
+                // console.log(data)
                 this.setState({
                     isLoadingPosts: false,
                     posts: data ? data : [],

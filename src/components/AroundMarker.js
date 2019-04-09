@@ -26,10 +26,11 @@ export class AroundMarker extends React.Component {
         return (
             <Marker
                 position={{ lat, lng }}
-                onMouseOver={this.toggleOpen}
-                onMouseOut={this.toggleOpen}
+                onMouseOver={isImagePost ? this.toggleOpen : null}
+                onMouseOut={isImagePost ? this.toggleOpen : null}
+                onClick={isImagePost ? null : this.toggleOpen}
                 icon={icon}
-            // onClick = {this.toggleOpen}
+
             >
                 {this.state.isOpen ?
                     (<InfoWindow onCloseClick={this.toggleOpen}>
