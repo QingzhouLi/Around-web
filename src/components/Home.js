@@ -91,7 +91,7 @@ export class Home extends React.Component {
         })
     };
 
-    getImagePosts = () => {
+    getPanelContent = (type) => {
         const { error, posts, isLoadingGeoLocation, isLoadingPosts } = this.state;
 
         if (error) {
@@ -101,7 +101,20 @@ export class Home extends React.Component {
         } else if (isLoadingPosts) {
             return <Spin tip="Lodaing Posts..." />;
         } else if (posts && posts.length > 0) {
-            const images = posts.map(({ user, url, message }) => ({
+
+            // if (image) -> getImagePosts
+            // else(vedio) -> something else
+            return type === 'image' ? this.getImagePosts() : 'video tab';
+        } else {
+            return "No nearby posts.";
+        }
+    };
+
+    getImagePosts = () => {
+
+        const images = this.state.posts
+            .filter(({ type }) => type === 'image')
+            .map(({ user, url, message }) => ({
                 user: user,
                 src: url,
                 thumbnail: url,
@@ -110,11 +123,8 @@ export class Home extends React.Component {
                 thumbnailHeight: 300
             }));
 
-            return <Gallery images={images} />;
-        } else {
-            return "No nearby posts.";
-        }
-    };
+        return <Gallery images={images} />;
+    }
 
 
     render() {
@@ -123,7 +133,7 @@ export class Home extends React.Component {
         return (
             <Tabs className="main-tabs" tabBarExtraContent={operations}>
                 <TabPane tab="Image Post" key="1">
-                    {this.getImagePosts()}
+                    {this.getPanelContent('video')}
                 </TabPane>
                 <TabPane tab="Vedio Post" key="2">Content of tab 2</TabPane>
                 <TabPane tab="Map" key="3">
@@ -133,7 +143,7 @@ export class Home extends React.Component {
                         containerElement={<div style={{ height: `600px` }} />}
                         mapElement={<div style={{ height: `100%` }} />}
                         posts={this.state.posts}
-                        loadNearByPosts = {this.loadNearByPosts}
+                        loadNearByPosts={this.loadNearByPosts}
                     />
                 </TabPane>
             </Tabs>
