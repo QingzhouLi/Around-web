@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tabs, Spin } from 'antd';
+import { Tabs, Spin, Row, Col } from 'antd';
 import { GEO_OPTIONS, POS_KEY, API_ROOT, AUTH_HEADER, TOKEN_KEY } from '../constants';
 import { Gallery } from './Gallery';
 import { CreatePostButton } from './CreatePostButton';
@@ -50,7 +50,7 @@ export class Home extends React.Component {
     loadNearByPosts = (center, radius) => {
         const token = localStorage.getItem(TOKEN_KEY);
         const { lat, lon } = center ? center : JSON.parse(localStorage.getItem(POS_KEY));
-        const range = radius ? radius : 20
+        const range = radius ? radius : 20000
 
         this.setState({
             isLoadingPosts: true,
@@ -104,7 +104,7 @@ export class Home extends React.Component {
 
             // if (image) -> getImagePosts
             // else(vedio) -> something else
-            return type === 'image' ? this.getImagePosts() : 'video tab';
+            return type === 'image' ? this.getImagePosts() : this.getVideoPosts();
         } else {
             return "No nearby posts.";
         }
@@ -126,6 +126,23 @@ export class Home extends React.Component {
         return <Gallery images={images} />;
     }
 
+    getVideoPosts = () => {
+        const video = this.state.posts
+            .filter(({ type }) => type === 'video')
+            .map(({ user, url, message }) => {
+                return (
+                    <Col span={6} key={url}>
+                        <video src={url} controls className='video-block' />
+                        <p > {`${user}: ${message}`}</p>
+                    </Col>
+
+                );
+            });
+        return (<Row gutter={32}>
+            {video}
+        </Row>);
+    }
+
 
     render() {
         const operations = <CreatePostButton loadNearByPosts={this.loadNearByPosts} />
@@ -133,9 +150,11 @@ export class Home extends React.Component {
         return (
             <Tabs className="main-tabs" tabBarExtraContent={operations}>
                 <TabPane tab="Image Post" key="1">
+                    {this.getPanelContent('image')}
+                </TabPane>
+                <TabPane tab="Vedio Post" key="2">
                     {this.getPanelContent('video')}
                 </TabPane>
-                <TabPane tab="Vedio Post" key="2">Content of tab 2</TabPane>
                 <TabPane tab="Map" key="3">
                     <AroundMap
                         googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyD3CEh9DXuyjozqptVB5LA-dN7MxWWkr9s&v=3.exp&libraries=geometry,drawing,places"

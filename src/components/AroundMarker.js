@@ -1,6 +1,6 @@
 import React from 'react';
-
 import { Marker, InfoWindow } from 'react-google-maps';
+import blueMarkerUrl from "../assets/image/blue-marker.svg"
 
 export class AroundMarker extends React.Component {
     state = {
@@ -14,17 +14,25 @@ export class AroundMarker extends React.Component {
             }
         })
     }
+
     render() {
-        const { location: { lat, lon: lng }, user, message, url } = this.props.post;
+        const { location: { lat, lon: lng }, user, message, url, type } = this.props.post;
+        const isImagePost = type === 'image';
+        const icon = isImagePost ? null : {
+            url: blueMarkerUrl,
+            scaledSize: new window.google.maps.Size(26, 41),
+        }
+
         return (
             <Marker
                 position={{ lat, lng }}
                 onMouseOver={this.toggleOpen}
                 onMouseOut={this.toggleOpen}
-                // onClick = {this.toggleOpen}
+                icon={icon}
+            // onClick = {this.toggleOpen}
             >
                 {this.state.isOpen ?
-                    (<InfoWindow onCloseClick = {this.toggleOpen}>
+                    (<InfoWindow onCloseClick={this.toggleOpen}>
                         <div>
                             <img
                                 className="around-marker-image"
