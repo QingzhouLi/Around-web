@@ -1,5 +1,5 @@
-// export const API_ROOT = 'http://35.196.131.183:8080/api/v1';
-export const API_ROOT = 'https://around-75015.appspot.com/api/v1';
+export const API_ROOT = 'http://35.196.131.183:8080/api/v1';
+// export const API_ROOT = 'https://around-75015.appspot.com/api/v1';
 
 export const TOKEN_KEY = "TOKEN_KEY";
 

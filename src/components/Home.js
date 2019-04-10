@@ -76,10 +76,12 @@ export class Home extends React.Component {
             })
             .then((data) => {
                 console.log(data)
-                this.setState({
-                    isLoadingPosts: false,
-                    posts: data ? data : [],
-                });
+                if (this.state.topic === 'around'){
+                    this.setState({
+                        isLoadingPosts: false,
+                        posts: data ? data : [],
+                    });
+                }
             })
             .catch((e) => {
                 this.setState({
@@ -110,10 +112,12 @@ export class Home extends React.Component {
             })
             .then((data) => {
                 console.log(data)
-                this.setState({
-                    isLoadingPosts: false,
-                    posts: data ? data : [],
-                });
+                if (this.state.topic === 'face'){
+                    this.setState({
+                        isLoadingPosts: false,
+                        posts: data ? data : [],
+                    });
+                }
             })
             .catch((e) => {
                 this.setState({
@@ -129,9 +133,9 @@ export class Home extends React.Component {
         this.setState({
             topic,
         })
-        if (topic === 'face'){
+        if (topic === 'face') {
             this.loadFacesAroundWorld();
-        }else{
+        } else {
             this.loadNearByPosts();
         }
     }
@@ -221,7 +225,7 @@ export class Home extends React.Component {
                             containerElement={<div style={{ height: `600px` }} />}
                             mapElement={<div style={{ height: `100%` }} />}
                             posts={this.state.posts}
-                            loadNearByPosts={this.state.topic === 'around'? this.loadNearByPosts: this.loadFacesAroundWorld}
+                            loadNearByPosts={this.state.topic === 'around' ? this.loadNearByPosts : this.loadFacesAroundWorld}
                         />
                     </TabPane>
                 </Tabs>
